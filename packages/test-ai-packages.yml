@@ -1,0 +1,115 @@
+generated: '2026-08-30'
+method: searched
+source: https://registry.npmjs.org/, https://pypi.org/pypi/, https://rubygems.org/api/v1/gems/, https://repo1.maven.org/maven2/ai/test/sdk/
+note: >-
+  Eight first-party client libraries, all confirmed first-party by registry metadata that points
+  back at test.ai's own GitHub org (github.com/testdotai) or at the reverse-DNS Maven group
+  ai.test.sdk. Every one of them is abandoned: the most recent release across all four registries
+  is 2022-04-17, and nothing has shipped in the four years since.
+package_count: 8
+official_count: 8
+last_release_across_all: '2022-04-17'
+packages:
+- name: test-ai-selenium
+  registry: maven
+  coordinates: ai.test.sdk:test-ai-selenium
+  language: java
+  official: true
+  version: 0.2.0
+  published: '2022-04-17'
+  repository: https://github.com/testdotai/java-selenium-sdk
+  url: https://repo1.maven.org/maven2/ai/test/sdk/test-ai-selenium/
+  note: >-
+    Maven groupId ai.test.sdk is the reverse-DNS of test.ai, which is the strongest available
+    proof of first-party publication. Four versions; lastUpdated 20220417005447.
+- name: test-ai-appium
+  registry: maven
+  coordinates: ai.test.sdk:test-ai-appium
+  language: java
+  official: true
+  version: 0.1.0
+  published: '2022-03-11'
+  repository: https://github.com/testdotai/java-appium-sdk
+  url: https://repo1.maven.org/maven2/ai/test/sdk/test-ai-appium/
+  note: Four versions; lastUpdated 20220311040411.
+- name: test-ai-selenium
+  registry: pypi
+  language: python
+  official: true
+  version: 0.1.20
+  published: '2022-03-21'
+  url: https://pypi.org/pypi/test-ai-selenium/json
+  repository: https://github.com/test-dot-ai/testai-python-selenium
+  note: >-
+    The home_page this package declares (github.com/test-dot-ai/...) now 404s — the org was
+    deleted or renamed, so the published install path points at a repository that no longer exists.
+- name: test-ai-appium
+  registry: pypi
+  language: python
+  official: true
+  version: 0.1.20
+  published: '2022-03-21'
+  url: https://pypi.org/pypi/test-ai-appium/json
+  repository: https://github.com/test-dot-ai/testai-python
+  note: Same dead home_page org as test-ai-selenium on PyPI.
+- name: test-ai-classifier
+  registry: npm
+  language: javascript
+  official: true
+  version: 4.0.2
+  published: '2020-01-09'
+  url: https://registry.npmjs.org/test-ai-classifier
+  repository: https://github.com/testdotai/appium-classifier-plugin
+  note: Appium semantic label plugin — the classifier server companion.
+- name: test-ai-classifier-client
+  registry: npm
+  language: javascript
+  official: true
+  version: 1.1.0
+  published: '2019-12-20'
+  url: https://registry.npmjs.org/test-ai-classifier-client
+  repository: https://github.com/testdotai/classifier-client-node
+  note: gRPC client for the Classifier service described in grpc/test-ai-classifier.proto.
+- name: testai_classifier
+  registry: pypi
+  language: python
+  official: true
+  version: 1.1.0
+  published: '2019-12-20'
+  url: https://pypi.org/pypi/testai_classifier/json
+  repository: https://github.com/testdotai/classifier-client-python
+  note: gRPC client for the Classifier service.
+- name: testai_classifier
+  registry: rubygems
+  language: ruby
+  official: true
+  version: 1.1.0
+  published: '2019-12-20'
+  url: https://rubygems.org/api/v1/gems/testai_classifier.json
+  repository: https://github.com/testdotai/classifier-client-ruby
+  note: gRPC client for the Classifier service.
+not_first_party:
+- name: testai
+  registry: pypi
+  version: 0.0.14
+  published: '2022-03-28'
+  official: false
+  note: >-
+    Name-squat, explicitly NOT test.ai. Its own metadata reads summary "My first Python package",
+    author "ai ai", author_email "<youremail@email.com>", no home_page. Recorded here so a later
+    round does not mistake it for a first-party SDK.
+- name: test-ai
+  registry: npm
+  version: null
+  published: null
+  official: false
+  note: >-
+    Published 2019-11-08 and unpublished 2020-03-16 by an unrelated party; the registry now
+    returns no dist-tags. Not test.ai's.
+registries_unreachable:
+- registry: maven-central-search
+  url: https://search.maven.org/solrsearch/select?q=ai.test&rows=20&wt=json
+  status: <no response>
+  note: >-
+    Timed out at 15s on the single permitted attempt. Not retried. The same facts were obtained
+    from https://repo1.maven.org/maven2/ai/test/sdk/ instead, so nothing is missing from this file.

@@ -1,0 +1,19 @@
+generated: '2026-08-30'
+method: searched
+source: openapi/test-ai-opentestdata-openapi.yaml + http://test.ai/ (no docs surface exists)
+note: >-
+  No rate limits are published, and none are expressible from the contract: no 429 status, no
+  RateLimit-* / X-RateLimit-* / Retry-After header, and no limit parameter appears anywhere in the
+  16 operations. There is also no live host left to observe limits on — api.opentestdata.org is
+  NXDOMAIN — so a probed reading is impossible, not merely absent.
+limit_count: 0
+limits: []
+headers: []
+status_code_on_exhaustion: null
+evidence:
+- url: http://test.ai/
+  status: 302
+  detail: No documentation surface; catch-all redirect off-domain.
+- url: openapi/test-ai-opentestdata-openapi.yaml
+  status: 200
+  detail: Contract declares only 200 and 500 responses across 16 operations; no 429.

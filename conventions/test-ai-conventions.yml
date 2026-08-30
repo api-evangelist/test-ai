@@ -1,0 +1,116 @@
+generated: '2026-08-30'
+method: derived
+source: openapi/test-ai-opentestdata-openapi.yaml
+note: >-
+  Derived from the contract only. Nothing could be searched: the provider serves no documentation
+  site, so every "not documented" below means the contract is silent, which for an agent is the
+  same as absent. No `Idempotency` pointer is wired into apis.yml — there is no idempotency
+  support to point at.
+auth:
+  style: http bearer
+  scheme: jwt
+  format: JWT
+  header: 'Authorization: Bearer <token>'
+  token_endpoint: POST /users/login (api.handlers.auth.login)
+  applied_to: 14 of 16 operations
+  unauthenticated: [api.handlers.general.ping, api.handlers.users.signup]
+  cross_ref: authentication/test-ai-authentication.yml
+  gaps:
+  - No token lifetime, expiry or refresh operation is declared anywhere in the contract.
+  - No scope or permission model; the only authorization axis is an admin flag set by POST /users/{id}/promote.
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key or equivalent header, parameter or extension in the spec. All six write
+    operations are POST, including the two whose summaries say "Update" (POST /data/{id},
+    POST /users/{id}), so a retried create is a duplicate create.
+pagination:
+  supported: false
+  style: null
+  evidence: >-
+    Search_SearchQuery declares only `type` and `query`. Search_SearchResults returns unbounded
+    tests[] and data[] arrays with no limit, offset, cursor, page or total field.
+field_expansion:
+  supported: false
+  evidence: No expand/fields/include parameter on any operation.
+metadata:
+  supported: false
+  evidence: No free-form metadata property on any schema.
+request_id_tracing:
+  supported: false
+  evidence: No request-id, correlation-id or trace header declared on any operation or response.
+versioning:
+  scheme: none-in-path
+  current: 1.0.0
+  evidence: >-
+    info.version is 1.0.0. No version segment in any path, no version header, no media-type
+    versioning. There is no way for a client to pin a version.
+  cross_ref: lifecycle/test-ai-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{error: string}'
+  rfc9457: false
+  cross_ref: errors/test-ai-problem-types.yml
+rate_limit_signaling:
+  supported: false
+  evidence: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header declared on any response, and no 429
+    status anywhere in the contract.
+  cross_ref: rate-limits/test-ai-rate-limits.yml
+content_types:
+  request: [application/json, multipart/form-data]
+  response: [application/json]
+  note: multipart is used only by POST /users/{id}/avatar (upload_avatar).
+reversibility:
+  state: absent
+  grade: null
+  applicable: true
+  note: >-
+    NOT `na`. This API has a real write surface — six mutating operations create or modify users,
+    tests and data — so reversibility is in scope, and the contract provides none of it. There is
+    no DELETE method on any of the 13 paths, and no cancel, refund, void, reverse, undo, rollback
+    or restore operation by any name. An agent that creates a Datum or a Test, or promotes a user
+    to admin, has no contracted way to take that action back.
+  write_operations:
+  - operationId: api.handlers.users.signup
+    method: POST
+    path: /users
+    reversal: null
+  - operationId: api.handlers.users.update
+    method: POST
+    path: /users/{id}
+    reversal: null
+    note: Update is not itself a reversal — no prior-state read-back or revision history is exposed.
+  - operationId: api.handlers.users.upload_avatar
+    method: POST
+    path: /users/{id}/avatar
+    reversal: null
+  - operationId: api.handlers.users.promote
+    method: POST
+    path: /users/{id}/promote
+    reversal: null
+    note: >-
+      Highest-consequence operation in the API — it grants admin. There is no demote or revoke
+      counterpart, so the privilege escalation it performs is one-way through this contract.
+  - operationId: api.handlers.data.create
+    method: POST
+    path: /data
+    reversal: null
+  - operationId: api.handlers.data.update
+    method: POST
+    path: /data/{id}
+    reversal: null
+  - operationId: api.handlers.tests.create
+    method: POST
+    path: /tests
+    reversal: null
+  windows: []
+  windows_note: >-
+    No window is asserted because the provider states none. Recording an invented window here
+    would be worse than recording nothing.
+dry_run_mode:
+  supported: false
+  evidence: No dry-run, preview, validate-only or simulate parameter on any operation.

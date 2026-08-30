@@ -1,0 +1,68 @@
+generated: '2026-08-30'
+method: probed
+source: 'probed 2026-08-30: TCP/TLS to test.ai:443, DNS (A/MX/TXT/CAA/DS), whois.nic.ai'
+note: >-
+  0-working/probe-domain-security.py returned `unreachable` and wrote nothing, so this file was
+  written by hand from the raw probes. The unreachability IS the finding: test.ai has no HTTPS
+  service at all. Every negative below is a real observation, not an unattempted check.
+hosts:
+- host: test.ai
+  ip: 192.64.119.35
+  tls:
+    available: false
+    port_443: filtered
+    evidence: >-
+      curl and a raw TCP connect to 192.64.119.35:443 both time out after 10s; port 80 accepts
+      immediately from the same client, so this is a filtered/absent listener rather than a
+      network fault at our end.
+    certificate: null
+  hsts:
+    present: false
+    evidence: >-
+      No Strict-Transport-Security header on the port-80 response, whose Server header is
+      namecheap-nginx.
+  http:
+    port_80: open
+    behaviour: >-
+      Blanket catch-all 302 to https://icebergqa.com/?utm_source=testai&utm_medium=redir for every
+      path probed, including /robots.txt. No path serves origin content.
+  dnssec:
+    enabled: false
+    evidence: 'No DS record; registry whois reports "DNSSEC: unsigned".'
+  caa:
+    present: false
+    records: []
+  spf:
+    present: false
+    records: []
+  dmarc:
+    present: false
+    records: []
+  mx:
+    present: false
+    records: []
+    note: No MX records — the domain cannot receive mail.
+  registrar:
+    name: NameCheap, Inc.
+    nameservers:
+    - dns1.registrar-servers.com
+    - dns2.registrar-servers.com
+    updated: '2026-08-12'
+    expires: '2027-01-19'
+    status:
+    - clientTransferProhibited
+- host: api.opentestdata.org
+  resolves: false
+  evidence: NXDOMAIN — no A, AAAA or CNAME. No TLS, DNS or HTTP posture can be measured.
+subdomains_probed:
+  result: none resolve
+  hosts:
+  - api.test.ai
+  - docs.test.ai
+  - app.test.ai
+  - developer.test.ai
+  - dev.test.ai
+  - status.test.ai
+  - blog.test.ai
+  - mcp.test.ai
+  - sdk.test.ai

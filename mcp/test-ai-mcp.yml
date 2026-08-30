@@ -1,0 +1,45 @@
+generated: '2026-08-30'
+method: derived
+source: openapi/test-ai-opentestdata-openapi.yaml
+note: >-
+  test.ai ships NO MCP server, hosted or local. This file records that absence and a candidate
+  tool shape derived from the one contract the company published, so a later round has a
+  baseline. Deliberately NO `type: MCPServer` pointer is wired into apis.yml — the tools below
+  are our derivation, not a surface the provider serves, and pointing at them would credit
+  test.ai with an agent surface it does not have.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+searched:
+- what: hosted/remote MCP endpoint on the provider's own hosts
+  result: >-
+    Not possible to serve one. test.ai has no HTTPS listener and every HTTP path 302s off-domain;
+    no subdomain (api/docs/app/dev/mcp/sdk.test.ai) resolves.
+- what: MCP package on npm/PyPI
+  result: None. The eight first-party packages are Selenium/Appium SDKs and gRPC classifier clients.
+- what: MCP server in the GitHub org
+  result: None across github.com/testdotai (18 repos) or github.com/Appdiff (5 forks).
+candidate_tools:
+- name: search_test_data
+  rest: api.handlers.search.search
+  description: Search the OpenTestData corpus for tests and data.
+- name: get_test
+  rest: api.handlers.tests.detail
+  description: Get details of a test by id.
+- name: create_test
+  rest: api.handlers.tests.create
+  description: Create a new test.
+- name: get_datum
+  rest: api.handlers.data.detail
+  description: Get details of a test datum by id.
+- name: create_datum
+  rest: api.handlers.data.create
+  description: Create a new test datum.
+- name: update_datum
+  rest: api.handlers.data.update
+  description: Update an existing test datum.

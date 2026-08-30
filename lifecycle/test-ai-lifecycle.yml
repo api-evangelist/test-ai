@@ -1,0 +1,95 @@
+generated: '2026-08-30'
+method: probed
+source: 'probed 2026-08-30: http://test.ai/, DNS for api.opentestdata.org, GitHub API for github.com/testdotai, npm/PyPI/RubyGems/Maven registry metadata'
+note: >-
+  No versioning policy, deprecation policy, SLA or status page is published, because the company
+  publishes nothing at all any more. No `StatusPage` or `Deprecation` pointer is wired — neither
+  exists. What can be established is the decay timeline below, entirely from dated, provider-
+  published evidence.
+status: retired
+status_evidence: >-
+  test.ai serves no site (443 filtered, every HTTP path 302s to a third party's domain);
+  api.opentestdata.org is NXDOMAIN; no first-party package has shipped since 2022-04-17.
+versioning:
+  policy_published: false
+  scheme: none
+  evidence: >-
+    info.version 1.0.0 with no version segment in any path and no version header. Clients cannot
+    pin a version.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  evidence: >-
+    No operation in the OpenAPI carries `deprecated: true`, and no Sunset or Deprecation response
+    header is declared. The API was not deprecated through the contract — the host was simply
+    withdrawn.
+sla:
+  published: false
+status_page:
+  published: false
+  probed:
+  - url: http://status.test.ai
+    status: 0
+    result: does not resolve
+changelog:
+  published: false
+  note: No dated changelog on any reachable surface; GitHub repos carry no releases feed in use.
+timeline:
+- date: '2015-08-28'
+  event: github.com/Appdiff organization created (the company's former name).
+  source: https://api.github.com/orgs/Appdiff
+- date: '2018-03-02'
+  event: >-
+    github.com/testdotai organization created, named "test.ai", described "AI powered test
+    automation platform", blog https://test.ai.
+  source: https://api.github.com/orgs/testdotai
+- date: '2019-12-20'
+  event: >-
+    Classifier gRPC clients published across three registries on one day — npm
+    test-ai-classifier-client 1.1.0, PyPI testai_classifier 1.1.0, RubyGems testai_classifier 1.1.0.
+  source: registry metadata
+- date: '2020-01-09'
+  event: npm test-ai-classifier 4.0.2 — last npm release.
+  source: https://registry.npmjs.org/test-ai-classifier
+- date: '2022-03-21'
+  event: PyPI test-ai-selenium 0.1.20 and test-ai-appium 0.1.20 — last PyPI releases.
+  source: https://pypi.org/pypi/test-ai-selenium/json
+- date: '2022-04-17'
+  event: >-
+    Maven Central ai.test.sdk:test-ai-selenium 0.2.0 — the last first-party artifact published to
+    any registry, anywhere.
+  source: https://repo1.maven.org/maven2/ai/test/sdk/test-ai-selenium/maven-metadata.xml
+- date: '2022-12-08'
+  event: Final commit pushed to any repo in the org (opentestdata-api).
+  source: https://api.github.com/repos/testdotai/opentestdata-api
+- date: '2026-08-12'
+  event: >-
+    Registrar record for test.ai last updated; the domain now answers only on port 80 with a
+    catch-all 302 to a third party.
+  source: whois.nic.ai
+- date: '2026-08-30'
+  event: >-
+    Probed for this profile — no HTTPS, no subdomains, no .well-known documents, and
+    api.opentestdata.org NXDOMAIN.
+  source: this pipeline run
+decay_signals:
+- signal: sdk_abandonment
+  detail: >-
+    Every one of the eight first-party SDKs predates the profile date by more than four years; the
+    newest is 2022-04-17.
+- signal: dead_declared_repository
+  detail: >-
+    The PyPI packages test-ai-selenium and test-ai-appium declare home_page URLs under
+    github.com/test-dot-ai, an organization that now 404s — the install path a consumer follows
+    from the registry leads nowhere.
+- signal: contract_host_withdrawn
+  detail: >-
+    The provider's own README names api.opentestdata.org as "the canonical publicly hosted
+    instance". That hostname no longer resolves, so the published contract has no live server.
+- signal: no_tls
+  detail: >-
+    The company's primary domain has no HTTPS listener at all, which no operating API business
+    would leave in that state.

@@ -1,0 +1,19 @@
+generated: '2026-08-30'
+method: searched
+source: 'http://test.ai/ (302 to a third-party domain), http://test.ai/pricing (302); no pricing surface exists'
+note: >-
+  Not "contact us" and not an enterprise gate — there is no commercial surface of any kind left to
+  read. test.ai serves no website: the only listener returns the same catch-all 302 for every
+  path. The published artifacts that do survive are open source (opentestdata-api is MIT, the Java
+  SDKs are Apache 2.0) and the packages are free on public registries, so there is nothing priced.
+plan_count: 0
+plans: []
+currency: null
+pricing_url: null
+evidence:
+- url: http://test.ai/
+  status: 302
+  detail: Location https://icebergqa.com/?utm_source=testai&utm_medium=redir (a different company).
+- url: https://test.ai/
+  status: 0
+  detail: TCP 443 filtered; connection times out.

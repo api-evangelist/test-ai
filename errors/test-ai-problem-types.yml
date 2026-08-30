@@ -1,0 +1,54 @@
+generated: '2026-08-30'
+method: derived
+source: openapi/test-ai-opentestdata-openapi.yaml
+note: >-
+  Derived from the declared responses of the OpenTestData contract. No docs error reference could
+  be searched to enrich these — the provider serves no documentation site. The notable finding is
+  what the contract does NOT declare: there is not one 4xx response anywhere in 16 operations,
+  so a client has no contracted shape for authentication failure, validation failure or
+  not-found, even though the handlers plainly produce them.
+format: bespoke
+media_type: application/json
+rfc9457: false
+envelope:
+  fields:
+  - name: error
+    type: string
+    description: Human-readable error message. The only field present in the general envelope.
+  variant:
+    operations:
+    - api.handlers.data.update
+    schema_name: Data_DatumUpdateError
+    fields:
+    - name: datum_id
+      type: number
+    - name: error
+      type: string
+    note: >-
+      POST /data/{id} declares its own 500 shape adding datum_id, so an agent cannot rely on a
+      single error schema across the API.
+status_codes_declared:
+- code: 500
+  title: Error
+  count: 14
+  media_type: application/json
+  schema: base.yaml#/responses/Error
+  remediation: >-
+    Not differentiated. The contract collapses every failure mode onto 500 with a free-text
+    message, so retry-vs-fix cannot be decided from the status code.
+- code: 200
+  title: Success
+  count: 16
+gaps:
+- issue: no_4xx_declared
+  detail: >-
+    Zero 4xx responses across all 16 operations. 14 operations require a JWT bearer token but
+    none declares a 401 or 403; the path-parameter operations (GET /users/{id}, GET /data/{id},
+    GET /tests/{id}) declare no 404; the request bodies carry maxLength/minLength/enum/required
+    constraints but no operation declares a 400 or 422 for violating them.
+- issue: undeclared_on_two_operations
+  detail: >-
+    GET /ping and POST /search declare only a 200 — they have no error response at all.
+- issue: no_error_code_registry
+  detail: >-
+    Errors carry no machine-readable code, type URI or catalogue identifier; `error` is prose.

@@ -1,0 +1,101 @@
+generated: '2026-08-30'
+method: derived
+source: openapi/test-ai-opentestdata-openapi.yaml
+note: >-
+  Entity graph derived from components.schemas $ref links and id-reference fields. The object
+  reference page that would normally enrich this (id prefixes, domains) does not exist — the
+  provider serves no docs site.
+entities:
+- name: User
+  schema: Users_User
+  description: An OpenTestData account. Carries an e-mail confirmation state and an admin flag.
+  identifier:
+    field: id
+    type: integer
+  base: Base_Base
+- name: Test
+  schema: Tests_Test
+  description: A named test, composed of an ordered set of labelled test data references.
+  identifier:
+    field: id
+    type: integer
+  base: Base_Base
+  fields:
+  - name: name
+    type: string
+    constraints: minLength 1, maxLength 160
+  - name: data
+    type: array<TestData>
+- name: TestData
+  schema: Tests_TestData
+  description: >-
+    The join between a Test and a Datum, carrying the label the datum plays in that test and a
+    disposition classifying it as NEUTRAL, POS, NEG, EDGE or DESTRUCTIVE.
+  fields:
+  - name: label
+    type: string
+    constraints: minLength 1, maxLength 80
+  - name: disposition
+    type: enum
+    values: [NEUTRAL, POS, NEG, EDGE, DESTRUCTIVE]
+  - name: datum_id
+    type: integer
+- name: Datum
+  schema: Data_Datum
+  description: A single typed fixture value in the open test-data corpus.
+  identifier:
+    field: id
+    type: integer
+  base: Base_Base
+  fields:
+  - name: name
+    type: string
+    constraints: minLength 1, maxLength 100
+  - name: type
+    type: enum
+    values: ['NULL', BOOL, NUM, STR, OBJ]
+  - name: value
+    type: string
+    constraints: maxLength 1024
+- name: Base
+  schema: Base_Base
+  description: >-
+    Shared audit mixin composed into Test and Datum via allOf — id (integer), created_at and
+    updated_at (date-time).
+  abstract: true
+relationships:
+- from: Test
+  to: TestData
+  kind: has_many
+  via: data
+  evidence: Tests_TestBase.data is an array of $ref Tests_TestData.
+- from: TestData
+  to: Datum
+  kind: belongs_to
+  via: datum_id
+  evidence: Tests_TestData.datum_id is an integer id-reference to Data_Datum.id.
+- from: Test
+  to: User
+  kind: belongs_to
+  via: user_id
+  evidence: Tests_Test allOf adds properties.user_id (integer).
+- from: Datum
+  to: User
+  kind: belongs_to
+  via: user_id
+  evidence: Data_Datum allOf adds properties.user_id (integer).
+- from: Test
+  to: Base
+  kind: has_one
+  via: allOf
+  evidence: Tests_Test composes $ref Base_Base.
+- from: Datum
+  to: Base
+  kind: has_one
+  via: allOf
+  evidence: Data_Datum composes $ref Base_Base.
+search_projection:
+  schema: Search_SearchResults
+  note: >-
+    POST /search returns both entity families in one envelope — tests[] of Tests_Test and data[]
+    of Data_Datum — selected by SearchQuery.type (ALL | TESTS | DATA).

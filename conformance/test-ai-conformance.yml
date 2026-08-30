@@ -1,0 +1,60 @@
+generated: '2026-08-30'
+method: derived
+source: openapi/test-ai-opentestdata-openapi.yaml, grpc/test-ai-classifier.proto
+note: >-
+  Derived from the two contracts the company published. No compliance or certification claim of
+  any kind could be searched for, because test.ai serves no website — so no `Compliance` pointer
+  is wired. Absence here means "not published", not "not conformant".
+conformance:
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme in the OpenAPI. Authentication is a plain HTTP bearer JWT
+    (components.securitySchemes.jwt: type http, scheme bearer, bearerFormat JWT).
+- id: oidc
+  conforms: false
+  evidence: No openIdConnect scheme; /.well-known/openid-configuration is not served (302 catch-all).
+- id: rfc6750
+  conforms: true
+  evidence: >-
+    components.securitySchemes.jwt declares type http / scheme bearer, the RFC 6750 Bearer token
+    scheme, applied per-operation via `security: [{jwt: []}]` on 14 of 16 operations.
+- id: rfc7519
+  conforms: true
+  evidence: bearerFormat JWT declared on the jwt securityScheme.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors are a bespoke envelope, not application/problem+json. base.yaml#/responses/Error is
+    application/json with schema {error: string}; data.yaml adds {datum_id: number, error: string}.
+- id: grpc
+  conforms: true
+  evidence: >-
+    grpc/test-ai-classifier.proto is proto3 and declares `service Classifier` with one unary RPC,
+    ClassifyElements(ElementClassificationRequest) returns (ClassifiedElements).
+- id: protobuf3
+  conforms: true
+  evidence: 'grpc/test-ai-classifier.proto line 1: syntax = "proto3".'
+- id: pagination
+  conforms: false
+  evidence: >-
+    No pagination anywhere. POST /search returns SearchResults as two unbounded arrays (tests[],
+    data[]) with no limit, offset, cursor or page parameter in SearchQuery.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No idempotency key header, parameter or scheme in the spec, and all six write operations are
+    POST including the two that semantically update (POST /data/{id}, POST /users/{id}).
+- id: json:api
+  conforms: false
+  evidence: Responses are plain application/json object/array bodies with no JSON:API document envelope.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface, no OData query options.
+domain_standards:
+  note: >-
+    REWARD-ONLY check. Software test automation has no adopted machine-readable interop standard
+    of the kind this check looks for (no SCIM/OData/OpenRTB/HL7/LTI equivalent for QA test
+    fixtures), so nothing is asserted here. The company's OpenTestData project was itself an
+    attempt to create an open corpus in this space, but it defined no wire standard.
+  standards: []
