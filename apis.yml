@@ -30,6 +30,19 @@ tags:
 - Test Automation
 - Quality Assurance
 - Artificial Intelligence
+- Machine-Learning
+- Computer-Vision
+- Selenium
+- Appium
+- Developer Tools
+- gRPC
+- Defunct
+tags_raw:
+- Company
+- Testing
+- Test Automation
+- Quality Assurance
+- Artificial Intelligence
 - Machine Learning
 - Computer Vision
 - Selenium
@@ -79,6 +92,10 @@ apis:
     base URL — the clients take host and port as constructor arguments.
   humanURL: https://github.com/testdotai/classifier-proto
   tags:
+  - Machine-Learning
+  - Computer-Vision
+  - gRPC
+  tags_raw:
   - Machine Learning
   - Computer Vision
   - gRPC
