@@ -105,6 +105,9 @@ apis:
   - type: SourceCode
     url: https://github.com/testdotai/classifier-proto
 common:
+- type: License
+  name: MIT
+  url: https://github.com/testdotai/opentestdata-api/blob/master/LICENSE
 - type: GitHubOrganization
   url: https://github.com/testdotai
 - type: Documentation
