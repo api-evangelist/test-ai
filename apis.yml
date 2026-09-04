@@ -12,6 +12,20 @@ description: >-
   operating, all of which remain publicly retrievable from its own GitHub organization and from the
   npm, PyPI, RubyGems and Maven Central registries.
 url: https://raw.githubusercontent.com/api-evangelist/test-ai/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://avatars.githubusercontent.com/u/36999702?s=200&v=4
 x-type: company
 x-source: harvest:secondary-market
