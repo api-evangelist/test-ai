@@ -70,40 +70,14 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- name: OpenTestData API
-  description: >-
-    REST API behind opentestdata.org, test.ai's free and open database of automated test fixture
-    data. 13 paths / 16 operations covering user signup and login, e-mail confirmation, avatars,
-    admin promotion, test and datum create/read/update, and a combined search over tests and data.
-    Authenticated with a JWT bearer token. The publicly hosted instance the provider documented,
-    api.opentestdata.org, no longer resolves; the contract survives in the company's own repository.
-  humanURL: https://github.com/testdotai/opentestdata-api
-  baseURL: http://api.opentestdata.org
-  tags:
-  - Test Data
-  - Search
-  - Open Data
-  properties:
-  - type: OpenAPI
-    url: openapi/test-ai-opentestdata-openapi.yaml
-  - type: Authentication
-    url: authentication/test-ai-authentication.yml
-  - type: ErrorCatalog
-    url: errors/test-ai-problem-types.yml
-  - type: DataModel
-    url: data-model/test-ai-data-model.yml
-  - type: Overlay
-    url: overlays/test-ai-opentestdata-overlay.yaml
-  - type: SourceCode
-    url: https://github.com/testdotai/opentestdata-api
 - name: test.ai Classifier
   description: >-
-    gRPC service that classifies UI element screenshots into semantic labels. A single RPC,
-    ClassifyElements, takes a map of element id to PNG bytes plus a label hint, a confidence
-    threshold and a weaker-match flag, and returns a per-element label with confidence scores.
-    This is the engine behind the test.ai Appium classifier plugin and the Java, Python, Node.js
-    and Ruby classifier clients. The server is run by the consumer, so there is no vendor-hosted
-    base URL — the clients take host and port as constructor arguments.
+    gRPC service that classifies UI element screenshots into semantic labels. A single RPC, ClassifyElements,
+    takes a map of element id to PNG bytes plus a label hint, a confidence threshold and a weaker-match
+    flag, and returns a per-element label with confidence scores. This is the engine behind the test.ai
+    Appium classifier plugin and the Java, Python, Node.js and Ruby classifier clients. The server is
+    run by the consumer, so there is no vendor-hosted base URL — the clients take host and port as constructor
+    arguments.
   humanURL: https://github.com/testdotai/classifier-proto
   tags:
   - Machine-Learning
@@ -118,7 +92,99 @@ apis:
     url: grpc/test-ai-classifier.proto
   - type: SourceCode
     url: https://github.com/testdotai/classifier-proto
+- aid: test-ai:test-ai-data-api
+  name: test.ai Data API
+  description: The Data API from test.ai — 2 operation(s) for data.
+  humanURL: https://github.com/testdotai/opentestdata-api
+  baseURL: http://api.opentestdata.org
+  tags:
+  - Data
+  properties:
+  - type: OpenAPI
+    url: openapi/test-ai-data-api-openapi.yml
+  - type: Authentication
+    url: authentication/test-ai-authentication.yml
+  - type: ErrorCatalog
+    url: errors/test-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/test-ai-data-model.yml
+  - type: SourceCode
+    url: https://github.com/testdotai/opentestdata-api
+- aid: test-ai:test-ai-ping-api
+  name: test.ai Ping API
+  description: The Ping API from test.ai — 1 operation(s) for ping.
+  humanURL: https://github.com/testdotai/opentestdata-api
+  baseURL: http://api.opentestdata.org
+  tags:
+  - Ping
+  properties:
+  - type: OpenAPI
+    url: openapi/test-ai-ping-api-openapi.yml
+  - type: Authentication
+    url: authentication/test-ai-authentication.yml
+  - type: ErrorCatalog
+    url: errors/test-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/test-ai-data-model.yml
+  - type: SourceCode
+    url: https://github.com/testdotai/opentestdata-api
+- aid: test-ai:test-ai-search-api
+  name: test.ai Search API
+  description: The Search API from test.ai — 1 operation(s) for search.
+  humanURL: https://github.com/testdotai/opentestdata-api
+  baseURL: http://api.opentestdata.org
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/test-ai-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/test-ai-authentication.yml
+  - type: ErrorCatalog
+    url: errors/test-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/test-ai-data-model.yml
+  - type: SourceCode
+    url: https://github.com/testdotai/opentestdata-api
+- aid: test-ai:test-ai-tests-api
+  name: test.ai Tests API
+  description: The Tests API from test.ai — 2 operation(s) for tests.
+  humanURL: https://github.com/testdotai/opentestdata-api
+  baseURL: http://api.opentestdata.org
+  tags:
+  - Tests
+  properties:
+  - type: OpenAPI
+    url: openapi/test-ai-tests-api-openapi.yml
+  - type: Authentication
+    url: authentication/test-ai-authentication.yml
+  - type: ErrorCatalog
+    url: errors/test-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/test-ai-data-model.yml
+  - type: SourceCode
+    url: https://github.com/testdotai/opentestdata-api
+- aid: test-ai:test-ai-users-api
+  name: test.ai Users API
+  description: The Users API from test.ai — 7 operation(s) for users.
+  humanURL: https://github.com/testdotai/opentestdata-api
+  baseURL: http://api.opentestdata.org
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/test-ai-users-api-openapi.yml
+  - type: Authentication
+    url: authentication/test-ai-authentication.yml
+  - type: ErrorCatalog
+    url: errors/test-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/test-ai-data-model.yml
+  - type: SourceCode
+    url: https://github.com/testdotai/opentestdata-api
 common:
+- type: Overlay
+  url: overlays/test-ai-opentestdata-overlay.yaml
 - type: License
   name: MIT
   url: https://github.com/testdotai/opentestdata-api/blob/master/LICENSE
