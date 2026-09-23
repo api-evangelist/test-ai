@@ -1,0 +1,149 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: OpenTestData Data API
+  license:
+    name: MIT
+tags:
+- name: Data
+paths:
+  /data:
+    post:
+      summary: Create a new test datum
+      operationId: api.handlers.data.create
+      requestBody:
+        $ref: '#/components/requestBodies/Data_DatumDetails'
+      responses:
+        '200':
+          $ref: '#/components/responses/Data_Datum'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Data
+  /data/{id}:
+    get:
+      summary: Get details of a datum
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The datum ID
+      operationId: api.handlers.data.detail
+      responses:
+        '200':
+          $ref: '#/components/responses/Data_Datum'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Data
+    post:
+      summary: Update a test datum
+      operationId: api.handlers.data.update
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The datum ID
+      requestBody:
+        $ref: '#/components/requestBodies/Data_DatumDetails'
+      responses:
+        '200':
+          $ref: '#/components/responses/Data_Datum'
+        '500':
+          $ref: '#/components/responses/Data_DatumUpdateError'
+      security:
+      - jwt: []
+      tags:
+      - Data
+components:
+  requestBodies:
+    Data_DatumDetails:
+      description: Datum details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Data_DatumBase'
+  schemas:
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Data_DatumBase:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - 'NULL'
+          - BOOL
+          - NUM
+          - STR
+          - OBJ
+        value:
+          type: string
+          maxLength: 1024
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+  responses:
+    Data_DatumUpdateError:
+      description: Datum Update Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              datum_id:
+                type: number
+              error:
+                type: string
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Data_Datum:
+      description: Datum details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Data_Datum'
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.handlers.auth.check_token

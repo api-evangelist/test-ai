@@ -1,0 +1,142 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: OpenTestData Search API
+  license:
+    name: MIT
+tags:
+- name: Search
+paths:
+  /search:
+    post:
+      summary: Search for tests and data
+      operationId: api.handlers.search.search
+      requestBody:
+        $ref: '#/components/requestBodies/Search_Search'
+      responses:
+        '200':
+          $ref: '#/components/responses/Search_SearchResults'
+      security:
+      - jwt: []
+      tags:
+      - Search
+components:
+  schemas:
+    Tests_Test:
+      allOf:
+      - $ref: '#/components/schemas/Tests_TestBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Data_DatumBase:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - 'NULL'
+          - BOOL
+          - NUM
+          - STR
+          - OBJ
+        value:
+          type: string
+          maxLength: 1024
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    Tests_TestBase:
+      properties:
+        name:
+          type: string
+          maxLength: 160
+          minLength: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tests_TestData'
+      required:
+      - name
+      - data
+      additionalProperties: false
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Search_SearchResults:
+      properties:
+        tests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tests_Test'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Data_Datum'
+    Search_SearchQuery:
+      properties:
+        type:
+          type: string
+          enum:
+          - ALL
+          - TESTS
+          - DATA
+        query:
+          type: string
+          minLength: 2
+    Tests_TestData:
+      properties:
+        label:
+          type: string
+          maxLength: 80
+          minLength: 1
+        disposition:
+          type: string
+          enum:
+          - NEUTRAL
+          - POS
+          - NEG
+          - EDGE
+          - DESTRUCTIVE
+        datum_id:
+          type: integer
+  requestBodies:
+    Search_Search:
+      description: Search parameters
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Search_SearchQuery'
+  responses:
+    Search_SearchResults:
+      description: Search results
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Search_SearchResults'
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.handlers.auth.check_token

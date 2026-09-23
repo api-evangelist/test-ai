@@ -1,0 +1,32 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: OpenTestData Ping API
+  license:
+    name: MIT
+tags:
+- name: Ping
+paths:
+  /ping:
+    get:
+      summary: server responds with PONG
+      operationId: api.handlers.general.ping
+      responses:
+        '200':
+          $ref: '#/components/responses/Base_PingSuccess'
+      tags:
+      - Ping
+components:
+  responses:
+    Base_PingSuccess:
+      description: Successful ping
+      content:
+        application/json:
+          schema:
+            type: string
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.handlers.auth.check_token

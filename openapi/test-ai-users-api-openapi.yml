@@ -1,0 +1,409 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: OpenTestData Users API
+  license:
+    name: MIT
+tags:
+- name: Users
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      operationId: api.handlers.users.signup
+      requestBody:
+        $ref: '#/components/requestBodies/Users_SignUp'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_SignUpSuccess'
+        '500':
+          $ref: '#/components/responses/Users_SignUpError'
+      tags:
+      - Users
+  /users/login:
+    post:
+      summary: Log in and retrieve an access token
+      operationId: api.handlers.auth.login
+      requestBody:
+        $ref: '#/components/requestBodies/Users_Login'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_LoginSuccess'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      tags:
+      - Users
+  /users/resend_confirmation_email:
+    post:
+      summary: Re-send the confirmation e-mail to the address associated with the logged in…
+      operationId: api.handlers.users.resend_confirmation
+      requestBody:
+        $ref: '#/components/requestBodies/Users_EmailResend'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_EmailResendSuccess'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Users
+  /users/confirm_email/{token}:
+    get:
+      summary: Confirm an e-mail address
+      operationId: api.handlers.users.confirm_email
+      parameters:
+      - in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        description: The e-mail confirmation token
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_EmailConfirmSuccess'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      tags:
+      - Users
+  /users/{id}:
+    get:
+      summary: Get details of a user
+      operationId: api.handlers.users.detail
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The user ID
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_GetUserSuccess'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Users
+    post:
+      summary: Update details for a user
+      operationId: api.handlers.users.update
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The user ID
+      requestBody:
+        $ref: '#/components/requestBodies/Users_UpdateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_UserDetails'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Users
+  /users/{id}/avatar:
+    get:
+      summary: Get avatar image data (this API is only available in the development version of…
+      operationId: api.handlers.users.get_avatar
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The user ID
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_Avatar'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      tags:
+      - Users
+    post:
+      summary: Upload image data to be used as the user avatar
+      operationId: api.handlers.users.upload_avatar
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The user ID
+      requestBody:
+        $ref: '#/components/requestBodies/Users_UpdateAvatar'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_UpdateAvatar'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Users
+  /users/{id}/promote:
+    post:
+      summary: Promote a user to an admin (admin authorization required)
+      operationId: api.handlers.users.promote
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The user ID
+      responses:
+        '200':
+          $ref: '#/components/responses/Users_UserDetails'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Users
+components:
+  schemas:
+    Users_UpdateUser:
+      properties:
+        email:
+          type: string
+          maxLength: 120
+          minLength: 5
+        password:
+          type: string
+          minLength: 8
+      additionalProperties: false
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Users_EmailResend:
+      properties:
+        email_confirmation_url:
+          type: string
+      required:
+      - email_confirmation_url
+      additionalProperties: false
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Users_SignUp:
+      properties:
+        username:
+          type: string
+          maxLength: 80
+          minLength: 1
+        email:
+          type: string
+          maxLength: 120
+          minLength: 5
+        password:
+          type: string
+          minLength: 8
+        bio:
+          type: string
+          maxLength: 240
+        email_confirmation_url:
+          type: string
+      required:
+      - username
+      - email
+      - password
+      - bio
+      - email_confirmation_url
+      additionalProperties: false
+    Users_Login:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - username
+      - password
+      additionalProperties: false
+    Data_DatumBase:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - 'NULL'
+          - BOOL
+          - NUM
+          - STR
+          - OBJ
+        value:
+          type: string
+          maxLength: 1024
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    Users_User:
+      allOf:
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          username:
+            type: string
+            maxLength: 80
+            minLength: 1
+          avatar_url:
+            type: string
+          bio:
+            type: string
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Data_Datum'
+  responses:
+    Users_EmailResendSuccess:
+      description: Successful resend
+      content:
+        application/json:
+          schema:
+            properties:
+              success:
+                type: boolean
+    Users_SignUpError:
+      description: New User Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+              error:
+                type: string
+    Users_Avatar:
+      description: The raw avatar image data
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+    Users_UpdateAvatar:
+      description: The URL for the newly-uploaded image
+      content:
+        application/json:
+          schema:
+            type: string
+    Users_EmailConfirmSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              confirmed:
+                type: boolean
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Users_LoginSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              token:
+                type: string
+              user_id:
+                type: integer
+    Users_SignUpSuccess:
+      description: New User
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: '#/components/schemas/Users_User'
+    Users_UserDetails:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_GetUserSuccess:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+  requestBodies:
+    Users_UpdateAvatar:
+      description: Image mime type and data
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              type:
+                type: string
+              data:
+                type: string
+    Users_Login:
+      description: Login details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_Login'
+    Users_SignUp:
+      description: Data needed to create a new User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_SignUp'
+    Users_UpdateUser:
+      description: User details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_UpdateUser'
+    Users_EmailResend:
+      description: Confirmation url to include in the confirmation e-mail
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_EmailResend'
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.handlers.auth.check_token

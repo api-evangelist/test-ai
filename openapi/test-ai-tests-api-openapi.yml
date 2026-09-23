@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: OpenTestData Tests API
+  license:
+    name: MIT
+tags:
+- name: Tests
+paths:
+  /tests:
+    post:
+      summary: Create a new test
+      operationId: api.handlers.tests.create
+      requestBody:
+        $ref: '#/components/requestBodies/Tests_TestDetails'
+      responses:
+        '200':
+          $ref: '#/components/responses/Tests_TestDetails'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Tests
+  /tests/{id}:
+    get:
+      summary: Get details of a test
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: The test ID
+      operationId: api.handlers.tests.detail
+      responses:
+        '200':
+          $ref: '#/components/responses/Tests_TestDetails'
+        '500':
+          $ref: '#/components/responses/Base_Error'
+      security:
+      - jwt: []
+      tags:
+      - Tests
+components:
+  schemas:
+    Tests_Test:
+      allOf:
+      - $ref: '#/components/schemas/Tests_TestBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Tests_TestBase:
+      properties:
+        name:
+          type: string
+          maxLength: 160
+          minLength: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tests_TestData'
+      required:
+      - name
+      - data
+      additionalProperties: false
+    Tests_TestData:
+      properties:
+        label:
+          type: string
+          maxLength: 80
+          minLength: 1
+        disposition:
+          type: string
+          enum:
+          - NEUTRAL
+          - POS
+          - NEG
+          - EDGE
+          - DESTRUCTIVE
+        datum_id:
+          type: integer
+  requestBodies:
+    Tests_TestDetails:
+      description: Test details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Tests_TestBase'
+  responses:
+    Tests_TestDetails:
+      description: Test details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Tests_Test'
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.handlers.auth.check_token

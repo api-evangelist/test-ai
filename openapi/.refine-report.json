@@ -1,0 +1,49 @@
+{
+  "provider": "test-ai",
+  "sources": [
+    "_original/test-ai-opentestdata-openapi.yaml"
+  ],
+  "outputs": [
+    "test-ai-data-api-openapi.yml",
+    "test-ai-ping-api-openapi.yml",
+    "test-ai-search-api-openapi.yml",
+    "test-ai-tests-api-openapi.yml",
+    "test-ai-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "test-ai-opentestdata-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /ping -> Ping",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users/login -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users/resend_confirmation_email -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /users/confirm_email/{token} -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /users/{id} -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users/{id} -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /users/{id}/avatar -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users/{id}/avatar -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /users/{id}/promote -> Users",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /data -> Data",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /data/{id} -> Data",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /data/{id} -> Data",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /tests -> Tests",
+    "test-ai-opentestdata-openapi.yaml: tagged paths GET /tests/{id} -> Tests",
+    "test-ai-opentestdata-openapi.yaml: tagged paths POST /search -> Search",
+    "test-ai-opentestdata-openapi.yaml: declared missing tag: Data",
+    "test-ai-opentestdata-openapi.yaml: declared missing tag: Ping",
+    "test-ai-opentestdata-openapi.yaml: declared missing tag: Search",
+    "test-ai-opentestdata-openapi.yaml: declared missing tag: Tests",
+    "test-ai-opentestdata-openapi.yaml: declared missing tag: Users",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "test-ai-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "test-ai-ping-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "test-ai-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "test-ai-tests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "test-ai-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
