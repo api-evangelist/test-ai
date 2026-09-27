@@ -74,17 +74,41 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Data_DatumBase'
+  responses:
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Data_DatumUpdateError:
+      description: Datum Update Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              datum_id:
+                type: number
+              error:
+                type: string
+    Data_Datum:
+      description: Datum details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Data_Datum'
   schemas:
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
     Data_DatumBase:
       properties:
         name:
@@ -107,40 +131,16 @@ components:
       - type
       - value
       additionalProperties: false
-    Data_Datum:
-      allOf:
-      - $ref: '#/components/schemas/Data_DatumBase'
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          user_id:
-            type: integer
-  responses:
-    Data_DatumUpdateError:
-      description: Datum Update Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              datum_id:
-                type: number
-              error:
-                type: string
-    Base_Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-    Data_Datum:
-      description: Datum details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Data_Datum'
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
   securitySchemes:
     jwt:
       type: http

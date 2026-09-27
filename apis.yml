@@ -44,8 +44,8 @@ tags:
 - Test Automation
 - Quality Assurance
 - Artificial Intelligence
-- Machine-Learning
-- Computer-Vision
+- Machine Learning
+- Computer Vision
 - Selenium
 - Appium
 - Developer Tools
@@ -64,6 +64,8 @@ tags_raw:
 - Developer Tools
 - gRPC
 - Defunct
+- Machine-Learning
+- Computer-Vision
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -80,13 +82,15 @@ apis:
     arguments.
   humanURL: https://github.com/testdotai/classifier-proto
   tags:
-  - Machine-Learning
-  - Computer-Vision
+  - Machine Learning
+  - Computer Vision
   - gRPC
   tags_raw:
   - Machine Learning
   - Computer Vision
   - gRPC
+  - Machine-Learning
+  - Computer-Vision
   properties:
   - type: Protobuf
     url: grpc/test-ai-classifier.proto

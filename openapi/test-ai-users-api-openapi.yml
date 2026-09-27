@@ -172,17 +172,88 @@ paths:
       tags:
       - Users
 components:
+  responses:
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Users_UpdateAvatar:
+      description: The URL for the newly-uploaded image
+      content:
+        application/json:
+          schema:
+            type: string
+    Users_EmailConfirmSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              confirmed:
+                type: boolean
+    Users_GetUserSuccess:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_EmailResendSuccess:
+      description: Successful resend
+      content:
+        application/json:
+          schema:
+            properties:
+              success:
+                type: boolean
+    Users_SignUpSuccess:
+      description: New User
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: '#/components/schemas/Users_User'
+    Users_Avatar:
+      description: The raw avatar image data
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+    Users_UserDetails:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_LoginSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              token:
+                type: string
+              user_id:
+                type: integer
+    Users_SignUpError:
+      description: New User Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+              error:
+                type: string
   schemas:
-    Users_UpdateUser:
-      properties:
-        email:
-          type: string
-          maxLength: 120
-          minLength: 5
-        password:
-          type: string
-          minLength: 8
-      additionalProperties: false
     Data_Datum:
       allOf:
       - $ref: '#/components/schemas/Data_DatumBase'
@@ -190,13 +261,6 @@ components:
       - properties:
           user_id:
             type: integer
-    Users_EmailResend:
-      properties:
-        email_confirmation_url:
-          type: string
-      required:
-      - email_confirmation_url
-      additionalProperties: false
     Base_Base:
       properties:
         id:
@@ -207,6 +271,22 @@ components:
         updated_at:
           type: string
           format: date-time
+    Users_User:
+      allOf:
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          username:
+            type: string
+            maxLength: 80
+            minLength: 1
+          avatar_url:
+            type: string
+          bio:
+            type: string
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Data_Datum'
     Users_SignUp:
       properties:
         username:
@@ -232,16 +312,6 @@ components:
       - bio
       - email_confirmation_url
       additionalProperties: false
-    Users_Login:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-      - username
-      - password
-      additionalProperties: false
     Data_DatumBase:
       properties:
         name:
@@ -264,104 +334,55 @@ components:
       - type
       - value
       additionalProperties: false
-    Users_User:
-      allOf:
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          username:
-            type: string
-            maxLength: 80
-            minLength: 1
-          avatar_url:
-            type: string
-          bio:
-            type: string
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/Data_Datum'
-  responses:
-    Users_EmailResendSuccess:
-      description: Successful resend
-      content:
-        application/json:
-          schema:
-            properties:
-              success:
-                type: boolean
-    Users_SignUpError:
-      description: New User Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-              email:
-                type: string
-              error:
-                type: string
-    Users_Avatar:
-      description: The raw avatar image data
-      content:
-        image/jpeg:
-          schema:
-            type: string
-            format: binary
-    Users_UpdateAvatar:
-      description: The URL for the newly-uploaded image
-      content:
-        application/json:
-          schema:
-            type: string
-    Users_EmailConfirmSuccess:
-      description: Auth token
-      content:
-        application/json:
-          schema:
-            properties:
-              confirmed:
-                type: boolean
-    Base_Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-    Users_LoginSuccess:
-      description: Auth token
-      content:
-        application/json:
-          schema:
-            properties:
-              token:
-                type: string
-              user_id:
-                type: integer
-    Users_SignUpSuccess:
-      description: New User
-      content:
-        application/json:
-          schema:
-            type: object
-            $ref: '#/components/schemas/Users_User'
-    Users_UserDetails:
-      description: User details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_User'
-    Users_GetUserSuccess:
-      description: User details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_User'
+    Users_UpdateUser:
+      properties:
+        email:
+          type: string
+          maxLength: 120
+          minLength: 5
+        password:
+          type: string
+          minLength: 8
+      additionalProperties: false
+    Users_Login:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - username
+      - password
+      additionalProperties: false
+    Users_EmailResend:
+      properties:
+        email_confirmation_url:
+          type: string
+      required:
+      - email_confirmation_url
+      additionalProperties: false
   requestBodies:
+    Users_UpdateUser:
+      description: User details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_UpdateUser'
+    Users_SignUp:
+      description: Data needed to create a new User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_SignUp'
+    Users_EmailResend:
+      description: Confirmation url to include in the confirmation e-mail
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_EmailResend'
     Users_UpdateAvatar:
       description: Image mime type and data
       required: true
@@ -380,27 +401,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Users_Login'
-    Users_SignUp:
-      description: Data needed to create a new User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_SignUp'
-    Users_UpdateUser:
-      description: User details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_UpdateUser'
-    Users_EmailResend:
-      description: Confirmation url to include in the confirmation e-mail
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_EmailResend'
   securitySchemes:
     jwt:
       type: http
