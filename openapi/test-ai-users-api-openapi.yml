@@ -173,6 +173,71 @@ paths:
       - Users
 components:
   responses:
+    Users_EmailConfirmSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              confirmed:
+                type: boolean
+    Users_UserDetails:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_GetUserSuccess:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_SignUpSuccess:
+      description: New User
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: '#/components/schemas/Users_User'
+    Users_LoginSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              token:
+                type: string
+              user_id:
+                type: integer
+    Users_EmailResendSuccess:
+      description: Successful resend
+      content:
+        application/json:
+          schema:
+            properties:
+              success:
+                type: boolean
+    Users_Avatar:
+      description: The raw avatar image data
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+    Users_SignUpError:
+      description: New User Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+              error:
+                type: string
     Base_Error:
       description: Error
       content:
@@ -188,79 +253,54 @@ components:
         application/json:
           schema:
             type: string
-    Users_EmailConfirmSuccess:
-      description: Auth token
+  requestBodies:
+    Users_SignUp:
+      description: Data needed to create a new User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_SignUp'
+    Users_Login:
+      description: Login details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_Login'
+    Users_UpdateAvatar:
+      description: Image mime type and data
+      required: true
       content:
         application/json:
           schema:
             properties:
-              confirmed:
-                type: boolean
-    Users_GetUserSuccess:
+              type:
+                type: string
+              data:
+                type: string
+    Users_UpdateUser:
       description: User details
+      required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Users_User'
-    Users_EmailResendSuccess:
-      description: Successful resend
+            $ref: '#/components/schemas/Users_UpdateUser'
+    Users_EmailResend:
+      description: Confirmation url to include in the confirmation e-mail
+      required: true
       content:
         application/json:
           schema:
-            properties:
-              success:
-                type: boolean
-    Users_SignUpSuccess:
-      description: New User
-      content:
-        application/json:
-          schema:
-            type: object
-            $ref: '#/components/schemas/Users_User'
-    Users_Avatar:
-      description: The raw avatar image data
-      content:
-        image/jpeg:
-          schema:
-            type: string
-            format: binary
-    Users_UserDetails:
-      description: User details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_User'
-    Users_LoginSuccess:
-      description: Auth token
-      content:
-        application/json:
-          schema:
-            properties:
-              token:
-                type: string
-              user_id:
-                type: integer
-    Users_SignUpError:
-      description: New User Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-              email:
-                type: string
-              error:
-                type: string
+            $ref: '#/components/schemas/Users_EmailResend'
   schemas:
-    Data_Datum:
-      allOf:
-      - $ref: '#/components/schemas/Data_DatumBase'
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          user_id:
-            type: integer
+    Users_EmailResend:
+      properties:
+        email_confirmation_url:
+          type: string
+      required:
+      - email_confirmation_url
+      additionalProperties: false
     Base_Base:
       properties:
         id:
@@ -271,6 +311,28 @@ components:
         updated_at:
           type: string
           format: date-time
+    Data_DatumBase:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - 'NULL'
+          - BOOL
+          - NUM
+          - STR
+          - OBJ
+        value:
+          type: string
+          maxLength: 1024
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
     Users_User:
       allOf:
       - $ref: '#/components/schemas/Base_Base'
@@ -287,6 +349,16 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Data_Datum'
+    Users_Login:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - username
+      - password
+      additionalProperties: false
     Users_SignUp:
       properties:
         username:
@@ -312,28 +384,13 @@ components:
       - bio
       - email_confirmation_url
       additionalProperties: false
-    Data_DatumBase:
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          minLength: 1
-        type:
-          type: string
-          enum:
-          - 'NULL'
-          - BOOL
-          - NUM
-          - STR
-          - OBJ
-        value:
-          type: string
-          maxLength: 1024
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
     Users_UpdateUser:
       properties:
         email:
@@ -344,63 +401,6 @@ components:
           type: string
           minLength: 8
       additionalProperties: false
-    Users_Login:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-      - username
-      - password
-      additionalProperties: false
-    Users_EmailResend:
-      properties:
-        email_confirmation_url:
-          type: string
-      required:
-      - email_confirmation_url
-      additionalProperties: false
-  requestBodies:
-    Users_UpdateUser:
-      description: User details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_UpdateUser'
-    Users_SignUp:
-      description: Data needed to create a new User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_SignUp'
-    Users_EmailResend:
-      description: Confirmation url to include in the confirmation e-mail
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_EmailResend'
-    Users_UpdateAvatar:
-      description: Image mime type and data
-      required: true
-      content:
-        application/json:
-          schema:
-            properties:
-              type:
-                type: string
-              data:
-                type: string
-    Users_Login:
-      description: Login details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_Login'
   securitySchemes:
     jwt:
       type: http

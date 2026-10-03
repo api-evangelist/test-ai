@@ -45,6 +45,23 @@ paths:
       - Tests
 components:
   schemas:
+    Tests_Test:
+      allOf:
+      - $ref: '#/components/schemas/Tests_TestBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     Tests_TestBase:
       properties:
         name:
@@ -59,13 +76,6 @@ components:
       - name
       - data
       additionalProperties: false
-    Tests_Test:
-      allOf:
-      - $ref: '#/components/schemas/Tests_TestBase'
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          user_id:
-            type: integer
     Tests_TestData:
       properties:
         label:
@@ -82,17 +92,13 @@ components:
           - DESTRUCTIVE
         datum_id:
           type: integer
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
   responses:
+    Tests_TestDetails:
+      description: Test details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Tests_Test'
     Base_Error:
       description: Error
       content:
@@ -102,12 +108,6 @@ components:
             properties:
               error:
                 type: string
-    Tests_TestDetails:
-      description: Test details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Tests_Test'
   requestBodies:
     Tests_TestDetails:
       description: Test details
