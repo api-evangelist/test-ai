@@ -94,16 +94,13 @@ components:
               error:
                 type: string
   schemas:
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
     Data_DatumBase:
       properties:
         name:
@@ -126,13 +123,16 @@ components:
       - type
       - value
       additionalProperties: false
-    Data_Datum:
-      allOf:
-      - $ref: '#/components/schemas/Data_DatumBase'
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          user_id:
-            type: integer
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
   requestBodies:
     Data_DatumDetails:
       description: Datum details
