@@ -1,0 +1,35 @@
+slug: test-ai
+provider: test.ai
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Data
+  spec_file: test-ai-data-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.7
+  evidence: POST /data 'Create a new test datum'; GET /data/{id} 'Get details of a datum'; schemas Data_Datum,
+    Data_DatumBase
+  reason: OpenTestData's operations create, read and update test data records used by automated Selenium/Appium
+    test suites, which supports software quality engineering (test asset stewardship). Confidence moderated
+    because the spec gives no description beyond generic datum CRUD.
+- tag: Tests
+  spec_file: test-ai-tests-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.7
+  evidence: POST /tests 'Create a new test'; schemas Tests_Test, Tests_TestData
+  reason: Operations create and retrieve software test definitions and test data in an open test-data
+    repository, which is test-asset stewardship under Software Quality Engineering.

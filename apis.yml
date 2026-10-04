@@ -189,6 +189,9 @@ apis:
   - type: SourceCode
     url: https://github.com/testdotai/opentestdata-api
 common:
+- type: CapabilityMap
+  url: capabilities/test-ai-capability-edges.yml
+  name: test.ai Business Capability Map
 - type: Overlay
   url: overlays/test-ai-opentestdata-overlay.yaml
 - type: License
