@@ -21,7 +21,7 @@ artifacts:
   grpc/test-ai-classifier.proto:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-05T072335.yml:
+  kin/checks-2026-09-05T195450.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-08-30T220315.yml:
@@ -66,6 +66,12 @@ artifacts:
   kin/score-2026-09-05T072335.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T144739.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T195450.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/test-ai-lifecycle.yml:
     method: unknown
     evidence: no authorship recorded
@@ -75,9 +81,24 @@ artifacts:
   mcp/test-ai-mcp.yml:
     method: derived
     evidence: declared in the artifact
-  openapi/test-ai-opentestdata-openapi.yaml:
+  openapi/_original/test-ai-opentestdata-openapi.yaml:
     method: derived
     evidence: declared in the artifact
+  openapi/test-ai-data-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/test-ai-ping-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/test-ai-search-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/test-ai-tests-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/test-ai-users-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   overlays/test-ai-opentestdata-overlay.yaml:
     method: generated
     evidence: declared in the artifact
