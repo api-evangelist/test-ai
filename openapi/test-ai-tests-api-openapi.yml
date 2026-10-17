@@ -44,22 +44,6 @@ paths:
       tags:
       - Tests
 components:
-  responses:
-    Base_Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-    Tests_TestDetails:
-      description: Test details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Tests_Test'
   schemas:
     Tests_Test:
       allOf:
@@ -68,6 +52,30 @@ components:
       - properties:
           user_id:
             type: integer
+    Tests_TestBase:
+      properties:
+        name:
+          type: string
+          maxLength: 160
+          minLength: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tests_TestData'
+      required:
+      - name
+      - data
+      additionalProperties: false
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     Tests_TestData:
       properties:
         label:
@@ -84,30 +92,22 @@ components:
           - DESTRUCTIVE
         datum_id:
           type: integer
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-    Tests_TestBase:
-      properties:
-        name:
-          type: string
-          maxLength: 160
-          minLength: 1
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tests_TestData'
-      required:
-      - name
-      - data
-      additionalProperties: false
+  responses:
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Tests_TestDetails:
+      description: Test details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Tests_Test'
   requestBodies:
     Tests_TestDetails:
       description: Test details

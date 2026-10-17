@@ -66,34 +66,17 @@ paths:
       tags:
       - Data
 components:
-  responses:
-    Data_Datum:
-      description: Datum details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Data_Datum'
-    Base_Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-    Data_DatumUpdateError:
-      description: Datum Update Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              datum_id:
-                type: number
-              error:
-                type: string
   schemas:
+    Base_Base:
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     Data_Datum:
       allOf:
       - $ref: '#/components/schemas/Data_DatumBase'
@@ -123,16 +106,33 @@ components:
       - type
       - value
       additionalProperties: false
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+  responses:
+    Base_Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Data_DatumUpdateError:
+      description: Datum Update Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              datum_id:
+                type: number
+              error:
+                type: string
+    Data_Datum:
+      description: Datum details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Data_Datum'
   requestBodies:
     Data_DatumDetails:
       description: Datum details

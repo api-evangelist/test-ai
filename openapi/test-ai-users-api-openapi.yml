@@ -173,28 +173,14 @@ paths:
       - Users
 components:
   responses:
-    Users_UpdateAvatar:
-      description: The URL for the newly-uploaded image
-      content:
-        application/json:
-          schema:
-            type: string
-    Users_GetUserSuccess:
-      description: User details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_User'
-    Users_LoginSuccess:
+    Users_EmailConfirmSuccess:
       description: Auth token
       content:
         application/json:
           schema:
             properties:
-              token:
-                type: string
-              user_id:
-                type: integer
+              confirmed:
+                type: boolean
     Base_Error:
       description: Error
       content:
@@ -204,22 +190,6 @@ components:
             properties:
               error:
                 type: string
-    Users_EmailResendSuccess:
-      description: Successful resend
-      content:
-        application/json:
-          schema:
-            properties:
-              success:
-                type: boolean
-    Users_EmailConfirmSuccess:
-      description: Auth token
-      content:
-        application/json:
-          schema:
-            properties:
-              confirmed:
-                type: boolean
     Users_Avatar:
       description: The raw avatar image data
       content:
@@ -234,12 +204,30 @@ components:
           schema:
             type: object
             $ref: '#/components/schemas/Users_User'
-    Users_UserDetails:
-      description: User details
+    Users_EmailResendSuccess:
+      description: Successful resend
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Users_User'
+            properties:
+              success:
+                type: boolean
+    Users_LoginSuccess:
+      description: Auth token
+      content:
+        application/json:
+          schema:
+            properties:
+              token:
+                type: string
+              user_id:
+                type: integer
+    Users_UpdateAvatar:
+      description: The URL for the newly-uploaded image
+      content:
+        application/json:
+          schema:
+            type: string
     Users_SignUpError:
       description: New User Error
       content:
@@ -253,17 +241,59 @@ components:
                 type: string
               error:
                 type: string
-  schemas:
+    Users_UserDetails:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+    Users_GetUserSuccess:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_User'
+  requestBodies:
     Users_Login:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-      - username
-      - password
-      additionalProperties: false
+      description: Login details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_Login'
+    Users_UpdateAvatar:
+      description: Image mime type and data
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              type:
+                type: string
+              data:
+                type: string
+    Users_SignUp:
+      description: Data needed to create a new User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_SignUp'
+    Users_UpdateUser:
+      description: User details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_UpdateUser'
+    Users_EmailResend:
+      description: Confirmation url to include in the confirmation e-mail
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users_EmailResend'
+  schemas:
     Users_User:
       allOf:
       - $ref: '#/components/schemas/Base_Base'
@@ -280,13 +310,16 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Data_Datum'
-    Data_Datum:
-      allOf:
-      - $ref: '#/components/schemas/Data_DatumBase'
-      - $ref: '#/components/schemas/Base_Base'
-      - properties:
-          user_id:
-            type: integer
+    Users_UpdateUser:
+      properties:
+        email:
+          type: string
+          maxLength: 120
+          minLength: 5
+        password:
+          type: string
+          minLength: 8
+      additionalProperties: false
     Users_EmailResend:
       properties:
         email_confirmation_url:
@@ -294,16 +327,6 @@ components:
       required:
       - email_confirmation_url
       additionalProperties: false
-    Base_Base:
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     Users_SignUp:
       properties:
         username:
@@ -329,15 +352,32 @@ components:
       - bio
       - email_confirmation_url
       additionalProperties: false
-    Users_UpdateUser:
+    Base_Base:
       properties:
-        email:
+        id:
+          type: integer
+        created_at:
           type: string
-          maxLength: 120
-          minLength: 5
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Data_Datum:
+      allOf:
+      - $ref: '#/components/schemas/Data_DatumBase'
+      - $ref: '#/components/schemas/Base_Base'
+      - properties:
+          user_id:
+            type: integer
+    Users_Login:
+      properties:
+        username:
+          type: string
         password:
           type: string
-          minLength: 8
+      required:
+      - username
+      - password
       additionalProperties: false
     Data_DatumBase:
       properties:
@@ -361,46 +401,6 @@ components:
       - type
       - value
       additionalProperties: false
-  requestBodies:
-    Users_UpdateAvatar:
-      description: Image mime type and data
-      required: true
-      content:
-        application/json:
-          schema:
-            properties:
-              type:
-                type: string
-              data:
-                type: string
-    Users_SignUp:
-      description: Data needed to create a new User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_SignUp'
-    Users_EmailResend:
-      description: Confirmation url to include in the confirmation e-mail
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_EmailResend'
-    Users_Login:
-      description: Login details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_Login'
-    Users_UpdateUser:
-      description: User details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Users_UpdateUser'
   securitySchemes:
     jwt:
       type: http
